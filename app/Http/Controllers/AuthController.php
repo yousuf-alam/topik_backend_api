@@ -37,12 +37,14 @@ class AuthController extends Controller
                 'success' => false
             ], Response::HTTP_CONFLICT);
         }
+        $crypt_user_id = $this->generateUniqueCryptUserId();
 
         $data = new User();
         $data->name = $request->name;
         $data->phone = $request->phone;
         $data->email = $request->email;
         $data->password = bcrypt($request->password);
+        $data->crypt_user_id = $crypt_user_id;
         $data->save();
 
         return response()->json([
@@ -51,6 +53,21 @@ class AuthController extends Controller
             'data' => $data
         ], Response::HTTP_CREATED);
 
+    }
+
+    private function generateUniqueCryptUserId()
+    {
+        $crypt_user_id = $this->generateRandomCryptUserId();
+        while (User::where('crypt_user_id', $crypt_user_id)->exists()) {
+            $crypt_user_id = $this->generateRandomCryptUserId();
+        }
+        return $crypt_user_id;
+    }
+
+    // Function to generate a random 8-digit crypt_user_id
+    private function generateRandomCryptUserId()
+    {
+        return str_pad(mt_rand(0, 99999999), 8, '0', STR_PAD_LEFT);
     }
 
     public function userLogin(Request $request)

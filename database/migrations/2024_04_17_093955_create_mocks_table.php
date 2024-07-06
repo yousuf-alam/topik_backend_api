@@ -16,12 +16,13 @@ return new class extends Migration
             $table->string('title')->nullable();
             $table->string('description')->nullable();
             $table->timestamp('start_time')->nullable();
-            $table->timestamp('start_end')->nullable();
-            $table->string('mock_type')->default('mock');
-            $table->integer('total_question')->nullable();
-            $table->integer('time')->nullable();
+            $table->timestamp('end_time')->nullable();
+            $table->string('mock_type')->default('practice');
+            $table->integer('total_question')->default(0);
+            $table->integer('duration')->default(0);
             $table->json('questions')->nullable();
             $table->tinyInteger('status')->default(1);
+            $table->integer('passing_percentage')->default(1);
             $table->unsignedBigInteger('deleted_by')->nullable();
             $table->softDeletes();
             $table->timestamps();

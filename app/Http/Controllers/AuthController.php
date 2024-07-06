@@ -16,7 +16,7 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'phone' => 'required',
-            'email' => 'required|email|unique:users',
+            'email' => 'required',
             'password' => 'required|min:6',
         ]);
 
@@ -26,15 +26,23 @@ class AuthController extends Controller
 
         if (User::where('phone', $request->phone)->exists()) {
             return response()->json([
-                'message' => 'Phone number already exists',
-                'success' => false
+                'error'=>[
+                    'status_code'=>Response::HTTP_CONFLICT,
+                    'error_code'=>'phone_number_exists',
+                    'error_message'=>'Phone number already exists'
+                ]
+
             ], Response::HTTP_CONFLICT);
         }
 
         if (User::where('email', $request->email)->exists()) {
             return response()->json([
-                'message' => 'Email  already exists',
-                'success' => false
+                'error'=>[
+                    'status_code'=>Response::HTTP_CONFLICT,
+                    'error_code'=>'phone_number_exists',
+                    'error_message'=>'Phone number already exists'
+                ]
+
             ], Response::HTTP_CONFLICT);
         }
         $crypt_user_id = $this->generateUniqueCryptUserId();
@@ -77,7 +85,6 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        // If validation fails, return the error response
         if ($validator->fails()) {
             return response()->json(['success' => false, 'message' => $validator->errors()], 400);
         }
@@ -88,8 +95,11 @@ class AuthController extends Controller
         if(!$user)
         {
             return response()->json([
-                "success"=>false,
-                "message"=>"User not found"
+                'error'=>[
+                    'status_code'=>Response::HTTP_NOT_FOUND,
+                    'error_code'=>'user_not_found',
+                    'error_message'=>'User does not exist',
+                ]
             ],Response::HTTP_NOT_FOUND);
         }
 
@@ -112,8 +122,11 @@ class AuthController extends Controller
             ], Response::HTTP_OK);
         }
         return response()->json([
-            "success" => false,
-            "message" => "Password Not Matched",
+            'error'=>[
+                'status_code'=>Response::HTTP_UNAUTHORIZED,
+                'error_code'=>'password_not_matched',
+                'error_message'=>'Password not matched',
+            ]
         ], Response::HTTP_UNAUTHORIZED);
 
     }

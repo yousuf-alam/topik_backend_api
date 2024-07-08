@@ -31,6 +31,7 @@ class PackageController extends Controller
                 "price"=>$item->price,
                 "description"=>$item->description,
                 "colorCode"=>$item->color_code ?? "",
+                "duration"=>$item->duration_days
             ];
         }
         return  response()->json([

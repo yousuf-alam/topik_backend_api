@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->double('old_price');
             $table->double('price');
+            $table->string('color_code');
+            $table->string('status');
             $table->string('created_by')->default('admin');
             $table->string('updated_by')->default('admin');
             $table->string('deleted_by')->nullable();

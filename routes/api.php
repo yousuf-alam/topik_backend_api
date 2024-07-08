@@ -28,7 +28,7 @@ Route::prefix('user')->group(function () {
 
     Route::middleware('auth:sanctum')->group(function () {
 
-        Route::get('available-mock',[Homecontroller::class,'availableMock']);
+        Route::get('available-mock',[UserController::class,'availableMock']);
         Route::post('mock-play',[MockController::class,'mockPlay']);
         Route::get('profile', [UserController::class,'userProfile']);
         Route::post('payment-submission', [PaymentSubmissionController::class,'paymentSubmission']);

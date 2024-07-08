@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\MockController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Mock\QuestionController;
+use App\Http\Controllers\Payment\PackageController;
 use App\Http\Controllers\Payment\PaymentSubmissionController;
 use App\Http\Controllers\User\Homecontroller;
 use App\Http\Controllers\User\UserController;
@@ -22,6 +23,7 @@ Route::prefix('admin')->group(function(){
 Route::prefix('user')->group(function () {
     Route::post('register', [AuthController::class, 'userRegister']);
     Route::post('login', [AuthController::class, 'userLogin']);
+    Route::get('all-packages',[PackageController::class,'getUserPackage']);
 
 
     Route::middleware('auth:sanctum')->group(function () {

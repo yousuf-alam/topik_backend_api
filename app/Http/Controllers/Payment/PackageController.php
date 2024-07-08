@@ -26,10 +26,11 @@ class PackageController extends Controller
         {
             $data[]=[
                 "id"=>$item->id,
-                "name"=>$item->name,
                 "title"=>$item->title,
+                "oldPrice"=>$item->old_price,
+                "price"=>$item->price,
                 "description"=>$item->description,
-                "colorCode"=>$item->color_code,
+                "colorCode"=>$item->color_code ?? "",
             ];
         }
         return  response()->json([

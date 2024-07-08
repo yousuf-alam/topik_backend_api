@@ -21,6 +21,7 @@ class PackageController extends Controller
                 ]
             ],Response::HTTP_NOT_FOUND);
         }
+        $data=[];
         foreach ($items as $item)
         {
             $data[]=[

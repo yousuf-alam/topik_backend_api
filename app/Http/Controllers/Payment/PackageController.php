@@ -10,7 +10,7 @@ class PackageController extends Controller
 {
     public function getUserPackage()
     {
-        $items=Package::where('status',1)->get();
+        $items=Package::all();
         if(!$items)
         {
             return response()->json([

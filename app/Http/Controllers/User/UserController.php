@@ -39,6 +39,7 @@ class UserController extends Controller
         foreach ($items as $item)
         {
             $data[]=[
+                'id'=>$item->id,
                 'title'=>$item->title,
                 'description'=>$item->description,
                 'image'=>$item->image ?? "",

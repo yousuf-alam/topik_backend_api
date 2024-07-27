@@ -65,7 +65,9 @@ public function mockPlay(Request $request)
                 'success' => false
             ], Response::HTTP_NOT_FOUND);
         }
+
         $questions = $this->getQuestionOptions($mock);
+
         $data = [
             'mock_id' => $mock->id,
             'title' => $mock->title,
@@ -88,7 +90,9 @@ public function mockPlay(Request $request)
     protected function getQuestionOptions($mock)
     {
         $questionIds= json_decode($mock->questions);
+
         $questions = Question::whereIn('id', $questionIds)->get();
+      
 
         $questions_data = [];
         $count = 0;

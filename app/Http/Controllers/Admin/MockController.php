@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Gameplay\Tournament;
 use App\Models\Mock\Mock;
+use App\Models\Mock\MockUser;
 use App\Models\Mock\Question;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class MockController extends Controller
@@ -92,7 +94,7 @@ public function mockPlay(Request $request)
         $questionIds= json_decode($mock->questions);
 
         $questions = Question::whereIn('id', $questionIds)->get();
-      
+
 
         $questions_data = [];
         $count = 0;
@@ -127,4 +129,56 @@ public function mockPlay(Request $request)
         }
         return $questions_data;
     }
+
+    public function submitAnswer(Request $request)
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json([
+                'error' => [
+                    'status_code' => Response::HTTP_NOT_FOUND,
+                    'error_code' => 'user_not_found',
+                    'error_message' => 'User not found',
+                ]
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        // Validate the request
+        $validator = Validator::make($request->all(), [
+            'mock_id' => 'required|integer',
+            'score' => 'required|numeric|min:0',
+            'wrong_answer' => 'required|integer|min:0',
+            'right_answer' => 'required|integer|min:0',
+            'skipped' => 'required|integer|min:0',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => [
+                    'status_code' => Response::HTTP_BAD_REQUEST,
+                    'error_code' => 'validation_error',
+                    'error_message' => $validator->errors()->first(),
+                ]
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        // Create and save the MockUser data
+        $data = new MockUser();
+        $data->user_id = $user->id;
+        $data->mock_id = $request->mock_id;
+        $data->score = $request->score;
+        $data->wrong_answer = $request->wrong_answer;
+        $data->right_answer = $request->right_answer;
+        $data->skipped = $request->skipped;
+        $data->time_took = $request->time_took;
+        $data->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Successfully submitted answer',
+            'data' => $data
+        ]);
+    }
+
 }

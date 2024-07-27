@@ -30,6 +30,7 @@ Route::prefix('user')->group(function () {
 
         Route::get('available-mock',[UserController::class,'availableMock']);
         Route::post('mock-play',[MockController::class,'mockPlay']);
+        Route::post('submit-answer',[MockController::class,'submitAnswer']);
         Route::get('profile', [UserController::class,'userProfile']);
         Route::post('payment-submission', [PaymentSubmissionController::class,'paymentSubmission']);
         Route::post('logout', [AuthController::class,'userLogout']);

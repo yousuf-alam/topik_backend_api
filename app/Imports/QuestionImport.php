@@ -15,10 +15,15 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class QuestionImport implements ToCollection, WithHeadingRow
 {
-
+    protected $type;
+    public function __construct($type)
+    {
+        $this->type = $type;
+    }
     public function collection(Collection $rows)
     {
         foreach ($rows as $row) {
+
 
 
 
@@ -26,8 +31,9 @@ class QuestionImport implements ToCollection, WithHeadingRow
                     [
                         'title' => $row['question'],
                         'image' => $row['image'],
+                        'audio' => $row['audio'],
                         'difficulty_level' => $row['level'],
-                        'type'=>'reading',
+                        'type'=>$this->type,
                     ]
                 );
 

@@ -16,8 +16,11 @@ class QuestionController extends Controller
 
         try {
             $file = $request->file('excel_file');
+            $type= $request->type;
 
-            Excel::import(new QuestionImport(), $file);
+
+
+            Excel::import(new QuestionImport($type), $file);
 
             return response()->json([
                 'success' => 'true',

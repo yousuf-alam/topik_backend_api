@@ -24,6 +24,12 @@ Route::prefix('user')->group(function () {
     Route::post('register', [AuthController::class, 'userRegister']);
     Route::post('login', [AuthController::class, 'userLogin']);
     Route::get('all-packages',[PackageController::class,'getUserPackage']);
+    Route::get('get-image-url',function (){
+        $imageUrl = asset('images/topic_logo.jpeg');
+
+        return $imageUrl;
+
+    });
 
 
     Route::middleware('auth:sanctum')->group(function () {

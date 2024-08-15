@@ -110,7 +110,7 @@ public function mockPlay(Request $request)
                 'question_no' => $count,
                 'questions_left' => count($questions)  - $count,
                 'title' => $question->title,
-                'image' => $question->image ?? '',
+                'image' => $question->image ? asset('reading').'/'.$question->image : '',
                 'audio' => $question->audio ?? '',
             ];
             $options_data = [];

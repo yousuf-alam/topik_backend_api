@@ -181,4 +181,14 @@ public function mockPlay(Request $request)
         ]);
     }
 
+    public function getAllMocks()
+    {
+        $items=Mock::all();
+        return response()->json([
+            "success"=>true,
+            "message"=>"all mock data",
+            "data"=>$items
+        ]);
+    }
+
 }

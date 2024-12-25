@@ -93,16 +93,17 @@ class QuestionImport implements ToCollection, WithHeadingRow
 
 
         $string = $data['answer'];
-        $character = mb_substr($string, 0, 1, 'UTF-8');
-        $code = unpack('N', mb_convert_encoding($character, 'UCS-4BE', 'UTF-8'));
-        $answer = $code[1] - 9311;
+
+
+        $answer = $string;
         $options = [
-            ['value' => $data['a'], 'is_right' => $answer==1 ? 1 : 0],
-            ['value' => $data['b'], 'is_right' => $answer==2 ? 1 : 0],
-            ['value' => $data['c'], 'is_right' => $answer==3 ? 1 : 0],
-            ['value' => $data['d'], 'is_right' => $answer==4 ? 1 : 0],
+            ['value' => $data['a'], 'is_right' => $answer=='A' ? 1 : 0],
+            ['value' => $data['b'], 'is_right' => $answer=='B' ? 1 : 0],
+            ['value' => $data['c'], 'is_right' => $answer=='C' ? 1 : 0],
+            ['value' => $data['d'], 'is_right' => $answer=='D' ? 1 : 0],
 
         ];
+
 
         shuffle($options);
 

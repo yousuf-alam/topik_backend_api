@@ -95,6 +95,7 @@ Route::prefix('admin')->group(function() {
             Route::post('mock-play', [MockController::class, 'mockPlay']);
             Route::post('submit-answer', [MockController::class, 'submitAnswer']);
             Route::get('profile', [UserController::class, 'userProfile']);
+            Route::get('exam-history',[MockController::class,'examHistory']);
             Route::post('payment-submission', [PaymentSubmissionController::class, 'paymentSubmission']);
             Route::post('logout', [AuthController::class, 'userLogout']);
         });

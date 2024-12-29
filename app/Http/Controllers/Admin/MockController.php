@@ -214,4 +214,31 @@ public function mockPlay(Request $request)
         ]);
     }
 
+    public function examHistory(Request $request)
+    {
+        $user=$request->user();
+        $histories=MockUser::where('user_id',$user->id)->get();
+        $data=[];
+        foreach ($histories as $history)
+        {
+            $data[]=[
+                "mock_id"=>$history->id,
+                "title"=>$history->mock->title,
+                "type"=>$history->mock->mock_type,
+                "right_answer"=>$history->right_answer,
+                "wrong_answer"=>$history->wrong_answer,
+                "skipped"=>$history->skipped,
+                "score"=>$history->score,
+                "time_took"=>$history->time_took,
+
+            ];
+
+        }
+        return response()->json([
+            "success"=>true,
+            "message"=>"exam history",
+            "data"=>$data
+        ]);
+    }
+
 }

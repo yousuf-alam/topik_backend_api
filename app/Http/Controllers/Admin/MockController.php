@@ -67,6 +67,7 @@ class MockController extends Controller
         $data->passing_percentage = $request->passing_percentage;
         $data->start_time = $request->start_time;
         $data->end_time = $request->end_time;
+        $data->mock_type = $request->mock_type;
         $data->status = $request->status;
         $data->save();
 

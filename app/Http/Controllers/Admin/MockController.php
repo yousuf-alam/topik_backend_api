@@ -29,10 +29,32 @@ class MockController extends Controller
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
-        $questions = Question::inRandomOrder()
-            ->limit($request->total_question)
-            ->pluck('id')
-            ->toArray();
+
+        if($request->mock_type==='reading')
+        {
+            $questions = Question::inRandomOrder()
+                ->limit($request->total_question)
+                ->where('type','reading')
+                ->pluck('id')
+                ->toArray();
+
+        }
+        else if($request->mock_type==='listening')
+        {
+            $questions = Question::inRandomOrder()
+                ->limit($request->total_question)
+                ->pluck('id')
+                ->toArray();
+
+        }
+        else {
+            $questions = Question::inRandomOrder()
+                ->limit($request->total_question)
+                ->pluck('id')
+                ->toArray();
+
+        }
+
 
 
 

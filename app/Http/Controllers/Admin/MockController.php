@@ -135,7 +135,7 @@ public function mockPlay(Request $request)
                 'questions_left' => count($questions)  - $count,
                 'title' => $question->title,
                 'image' => $question->image ? asset('reading').'/'.$question->image : '',
-                'audio' => $question->audio ? asset('audio'.'/'.$question->audio ) : '',
+                'audio' => $question->audio ? asset('listening'.'/'.$question->audio ) : '',
             ];
             $options_data = [];
             foreach ($options as $option) {

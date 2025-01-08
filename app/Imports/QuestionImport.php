@@ -23,6 +23,7 @@ class QuestionImport implements ToCollection, WithHeadingRow
     public function collection(Collection $rows)
     {
         foreach ($rows as $row) {
+//            dd($row);
 
 
 
@@ -36,6 +37,7 @@ class QuestionImport implements ToCollection, WithHeadingRow
                         'type'=>$this->type,
                     ]
                 );
+                dd($question);
 
 
                 $options = $this->shuffleOptions($row);

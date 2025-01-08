@@ -13,6 +13,7 @@ class Question extends Model
     protected $fillable = [
         'title',
         'image',
+        'audio',
         'difficulty_level',
         'type',
         'right_answer',

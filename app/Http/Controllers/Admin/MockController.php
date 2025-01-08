@@ -43,6 +43,7 @@ class MockController extends Controller
         {
             $questions = Question::inRandomOrder()
                 ->limit($request->total_question)
+                ->where('type','listening')
                 ->pluck('id')
                 ->toArray();
 

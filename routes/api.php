@@ -9,6 +9,7 @@ use App\Http\Controllers\SuperAdmin\PermissionController;
 use App\Http\Controllers\SuperAdmin\RoleController;
 use App\Http\Controllers\User\Homecontroller;
 use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\WalletController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -98,6 +99,10 @@ Route::prefix('admin')->group(function() {
             Route::get('exam-history',[MockController::class,'examHistory']);
             Route::post('payment-submission', [PaymentSubmissionController::class, 'paymentSubmission']);
             Route::post('logout', [AuthController::class, 'userLogout']);
+
+            //
+            Route::post('credit-wallet',[WalletController::class,'creditWallet']);
+            Route::post('debit-wallet',[WalletController::class,'debitWallet']);
         });
     });
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Mock\Mock;
+use App\Models\User\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -13,10 +14,17 @@ class UserController extends Controller
     public function userProfile(Request $request)
     {
         $user=$request->user();
+        $wallet =[
+        'gems'  => $user->wallet?->gems ?? 0,
+        'coins' => $user->wallet?->coins ?? 0,
+    ];
+//        $user['wallet']=$wallet;
+
         return response()->json([
             "success"=>true,
             "message"=>"User Profile",
-            "data"=>$user
+            "data"=>$user,
+
         ]);
 
     }

@@ -223,7 +223,7 @@ public function mockPlay(Request $request)
         foreach ($histories as $history)
         {
             $data[]=[
-                "mock_id"=>$history->id,
+                "mock_id"=>$history->mock_id,
                 "title"=>$history->mock->title,
                 "type"=>$history->mock->mock_type,
                 "right_answer"=>$history->right_answer,

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User\User;
+use App\Models\User\Wallet;
+use App\Models\User\WalletHistory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
@@ -54,6 +56,22 @@ class AuthController extends Controller
         $data->password = bcrypt($request->password);
         $data->crypt_user_id = $crypt_user_id;
         $data->save();
+
+        $wallet=new Wallet();
+        $wallet->user_id=$data->id;
+        $wallet->coins=50;
+        $wallet->gems=5;
+        $wallet->save();
+
+        $walletHistory= new WalletHistory();
+        $walletHistory->user_id=$data->id;
+        $walletHistory->type='sign_up';
+        $walletHistory->description='You have got 50 coins and 5 gems for sign up';
+        $walletHistory->credit_coins=$wallet->coins;
+        $walletHistory->credit_gems=$wallet->gems;
+        $walletHistory->coin_balance=$wallet->coins;
+        $walletHistory->gems_balance=$wallet->gems;
+        $walletHistory->save();
 
         return response()->json([
             'message' => 'User registered successfully',

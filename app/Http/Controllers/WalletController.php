@@ -42,6 +42,8 @@ class WalletController extends Controller
 
         $walletHistory->save();
 
+        $user['wallet']=$user->wallet;
+
 // Return response
         return response()->json([
             'success' => true,
@@ -81,6 +83,7 @@ class WalletController extends Controller
         }
 
         $walletHistory->save();
+        $user['wallet']=$user->wallet;
 
 // Return response
         return response()->json([

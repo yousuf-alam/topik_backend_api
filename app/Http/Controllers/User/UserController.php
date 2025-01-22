@@ -136,6 +136,7 @@ class UserController extends Controller
                      'id'=>$item->id,
                      'title'=>$item->title,
                      'description'=>$item->description,
+                     'coin_fee'=>$item->coin_fee,
                      'image'=>$item->image ?? "",
                      'total_question'=> $item->total_question,
                      'duration'=>$item->duration,
@@ -173,6 +174,7 @@ class UserController extends Controller
             $data[]=[
                 'id'=>$item->id,
                 'title'=>$item->title,
+                'coin_fee'=>$item->coin_fee,
                 'description'=>$item->description,
                 'image'=>$item->image ?? "",
                 'total_question'=> $item->total_question,

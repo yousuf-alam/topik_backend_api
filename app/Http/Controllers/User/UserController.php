@@ -36,6 +36,7 @@ class UserController extends Controller
         $now = Carbon::now();
         $items=Mock::where('start_time', '<=', $now)
             ->where('end_time', '>=', $now)
+            ->where('mock_type','=','practice')
             ->get();;
         if(!$items){
             return response()->json([

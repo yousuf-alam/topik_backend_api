@@ -90,6 +90,7 @@ Route::prefix('admin')->group(function() {
         Route::middleware('auth:sanctum')->group(function () {
 
             Route::get('available-mock', [UserController::class, 'availableMock']);
+            Route::get('upcoming-mock', [UserController::class, 'upComingMock']);
             Route::get('reading-practice-mock', [UserController::class, 'readingPracticeMock']);
             Route::get('listening-practice-mock', [UserController::class, 'listeningPracticeMock']);
 

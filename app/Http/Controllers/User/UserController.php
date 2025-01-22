@@ -33,7 +33,10 @@ class UserController extends Controller
     public function availableMock(Request $request)
     {
         $user=$request->user();
-        $items=Mock::where('mock_type','=','practice')->get();
+        $now = Carbon::now();
+        $items=Mock::where('start_time', '<=', $now)
+            ->where('end_time', '>=', $now)
+            ->get();;
         if(!$items){
             return response()->json([
                 'error'=>[

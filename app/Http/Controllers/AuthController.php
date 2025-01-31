@@ -32,10 +32,10 @@ class AuthController extends Controller
 
         if (User::where('phone', $request->phone)->exists()) {
             return response()->json([
-                'error'=>[
-                    'status_code'=>Response::HTTP_CONFLICT,
-                    'error_code'=>'phone_number_exists',
-                    'error_message'=>'Phone number already exists'
+                'error' => [
+                    'status_code' => Response::HTTP_CONFLICT,
+                    'error_code' => 'phone_number_exists',
+                    'error_message' => 'Phone number already exists'
                 ]
 
             ], Response::HTTP_CONFLICT);
@@ -43,10 +43,10 @@ class AuthController extends Controller
 
         if (User::where('email', $request->email)->exists()) {
             return response()->json([
-                'error'=>[
-                    'status_code'=>Response::HTTP_CONFLICT,
-                    'error_code'=>'phone_number_exists',
-                    'error_message'=>'Phone number already exists'
+                'error' => [
+                    'status_code' => Response::HTTP_CONFLICT,
+                    'error_code' => 'phone_number_exists',
+                    'error_message' => 'Phone number already exists'
                 ]
 
             ], Response::HTTP_CONFLICT);
@@ -61,20 +61,20 @@ class AuthController extends Controller
         $data->crypt_user_id = $crypt_user_id;
         $data->save();
 
-        $wallet=new Wallet();
-        $wallet->user_id=$data->id;
-        $wallet->coins=50;
-        $wallet->gems=5;
+        $wallet = new Wallet();
+        $wallet->user_id = $data->id;
+        $wallet->coins = 50;
+        $wallet->gems = 5;
         $wallet->save();
 
-        $walletHistory= new WalletHistory();
-        $walletHistory->user_id=$data->id;
-        $walletHistory->type='sign_up';
-        $walletHistory->description='You have got 50 coins and 5 gems for sign up';
-        $walletHistory->credit_coins=$wallet->coins;
-        $walletHistory->credit_gems=$wallet->gems;
-        $walletHistory->coin_balance=$wallet->coins;
-        $walletHistory->gems_balance=$wallet->gems;
+        $walletHistory = new WalletHistory();
+        $walletHistory->user_id = $data->id;
+        $walletHistory->type = 'sign_up';
+        $walletHistory->description = 'You have got 50 coins and 5 gems for sign up';
+        $walletHistory->credit_coins = $wallet->coins;
+        $walletHistory->credit_gems = $wallet->gems;
+        $walletHistory->coin_balance = $wallet->coins;
+        $walletHistory->gems_balance = $wallet->gems;
         $walletHistory->save();
 
         return response()->json([
@@ -103,7 +103,7 @@ class AuthController extends Controller
     public function userLogin(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'phone' => 'required',
+            'email' => 'required',
             'password' => 'required',
         ]);
 
@@ -111,18 +111,17 @@ class AuthController extends Controller
             return response()->json(['success' => false, 'message' => $validator->errors()], 400);
         }
 
-        $user = User::where('phone', $request->phone)->first();
+        $user = User::where('email', $request->email)->first();
 
 
-        if(!$user)
-        {
+        if (!$user) {
             return response()->json([
-                'error'=>[
-                    'status_code'=>Response::HTTP_NOT_FOUND,
-                    'error_code'=>'user_not_found',
-                    'error_message'=>'User does not exist',
+                'error' => [
+                    'status_code' => Response::HTTP_NOT_FOUND,
+                    'error_code' => 'user_not_found',
+                    'error_message' => 'User does not exist',
                 ]
-            ],Response::HTTP_NOT_FOUND);
+            ], Response::HTTP_NOT_FOUND);
         }
 
         if (Hash::check($request->password, $user->password)) {
@@ -130,9 +129,8 @@ class AuthController extends Controller
 
                 "id" => $user->crypt_user_id,
                 "name" => $user->name,
-                "phone" => $user->phone,
+                "phone" => $user->email,
                 "token" => $user->createToken('MyApp')->plainTextToken,
-
 
 
             ];
@@ -144,10 +142,10 @@ class AuthController extends Controller
             ], Response::HTTP_OK);
         }
         return response()->json([
-            'error'=>[
-                'status_code'=>Response::HTTP_UNAUTHORIZED,
-                'error_code'=>'password_not_matched',
-                'error_message'=>'Password not matched',
+            'error' => [
+                'status_code' => Response::HTTP_UNAUTHORIZED,
+                'error_code' => 'password_not_matched',
+                'error_message' => 'Password not matched',
             ]
         ], Response::HTTP_UNAUTHORIZED);
 
@@ -164,58 +162,62 @@ class AuthController extends Controller
 
     public function deleteAccount(Request $request)
     {
-        $user=$request->user();
-        $user->email= 'del_'.$user->email;
-        $user->phone='del_'.$user->phone;
-        $user->ac_status='deleted';
+        $user = $request->user();
+        $user->email = 'del_' . $user->email;
+        $user->phone = 'del_' . $user->phone;
+        $user->ac_status = 'deleted';
         $user->save();
 
         return response()->json([
-            "success"=>true,
-            "message"=>"account deleted.Please sign up again"
+            "success" => true,
+            "message" => "account deleted.Please sign up again"
         ]);
 
     }
 
     public function sendOtp(Request $request)
     {
-        $userExist=User::where('email',$request->email)->first();
-        if(!$userExist)
-        {
+        $userExist = User::where('email', $request->email)->first();
+        if (!$userExist) {
             return response()->json([
-                "success"=>false,
-                "message"=>'user not found'
+                "success" => false,
+                "message" => 'user not found'
             ]);
         }
 
         $otp = $this->generateOTP();
-        Otp::updateOrCreate( [
+        Otp::updateOrCreate([
             'email' => $request->email,
         ], [
-            'otp'            => $otp,
-            'send_otp_count' => DB::raw( 'send_otp_count+1' ),
-        ] );
+            'otp' => $otp,
+            'send_otp_count' => DB::raw('send_otp_count+1'),
+        ]);
 
         Mail::to($request->email)->send(new OtpMail($otp));
 
-        return  response()->json([
-            "success"=>true,
-            "message"=>"Otp has sent to your email.please check spam folder"
+        return response()->json([
+            "success" => true,
+            "message" => "Otp has sent to your email.please check spam folder"
         ]);
 
     }
-    public function generateOTP() {
-        $number = mt_rand( 100000, 999999 ); // better than rand()
+
+    public function generateOTP()
+    {
+        $number = mt_rand(100000, 999999); // better than rand()
         // call the same function if the otp exists already
-        if ( $this->OTPExists( $number ) ) {
+        if ($this->OTPExists($number)) {
             return $this->generateOTP();
         }
 
         return $number;
     }
-    public function OTPExists( $number ): bool {
-        return Otp::where( 'otp', $number )->exists();
+
+    public function OTPExists($number): bool
+    {
+        return Otp::where('otp', $number)->exists();
     }
+
     public function verifyOtp(Request $request)
     {
         $request->validate([
@@ -231,26 +233,56 @@ class AuthController extends Controller
 
         if (!$otpRecord) {
             return response()->json([
-                'success'=>false,
+                'success' => false,
                 'message' => 'OTP not found'
             ], 400);
         }
-
 
 
         if ($otpRecord->otp == $otp) {
             // OTP is correct, delete it from the database
 
             return response()->json([
-                'success'=>true,
+                'success' => true,
                 'message' => 'OTP verified successfully!'
             ]);
-        }
-        else {
+        } else {
             return response()->json([
-                'success'=>false,
+                'success' => false,
                 'message' => 'Invalid OTP'
             ], 400);
         }
     }
+
+    public function resetPassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|exists:users,email',
+            'password' => 'required|min:6',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+
+
+        // Update password
+        User::where('email', $request->email)
+            ->update(['password' => Hash::make($request->password)]);
+
+        // Delete token after successful reset
+
+
+        return response()->json([
+
+            'success'=>true,
+            'message' => 'Password reset successful!'
+        ]);
+    }
+
+
 }

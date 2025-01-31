@@ -100,6 +100,7 @@ Route::prefix('admin')->group(function() {
             Route::get('exam-history',[MockController::class,'examHistory']);
             Route::post('payment-submission', [PaymentSubmissionController::class, 'paymentSubmission']);
             Route::post('logout', [AuthController::class, 'userLogout']);
+            Route::get('account-deletion',[AuthController::class,'deleteAccount']);
 
             //
             Route::post('credit-wallet',[WalletController::class,'creditWallet']);

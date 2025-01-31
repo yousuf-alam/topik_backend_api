@@ -157,4 +157,19 @@ class AuthController extends Controller
             "message" => "Logged out successfully"
         ], Response::HTTP_OK);
     }
+
+    public function deleteAccount(Request $request)
+    {
+        $user=$request->user();
+        $user->email= 'del_'.$user->email;
+        $user->phone='del_'.$user->phone;
+        $user->ac_status='deleted';
+        $user->save();
+
+        return response()->json([
+            "success"=>true,
+            "message"=>"account deleted.Please sign up again"
+        ]);
+
+    }
 }

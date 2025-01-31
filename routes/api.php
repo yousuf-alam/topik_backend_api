@@ -61,8 +61,8 @@ Route::prefix('admin')->group(function() {
         //question
 //        Route::post('/import-question', [QuestionController::class, 'importQuestion']);
         Route::get('all-questions',[QuestionController::class,'allQuestion']);
-        Route::get('question-by-id',[QuestionController::class,'questionById']);
-        Route::get('update-question',[QuestionController::class,'updateQuestion']);
+        Route::get('question-by-id/{id}',[QuestionController::class,'questionById']);
+        Route::post('update-question/{id}',[QuestionController::class,'updateQuestion']);
 
         //package
         Route::get('all-packages',[PackageController::class,'allPackages']);

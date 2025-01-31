@@ -85,6 +85,8 @@ Route::prefix('admin')->group(function() {
             return $imageUrl;
 
         });
+        Route::post('send-otp',[AuthController::class,'sendOtp']);
+        Route::post('verify-otp',[AuthController::class,'verifyOtp']);
 
 
         Route::middleware('auth:sanctum')->group(function () {

@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\OtpMail;
+use App\Models\Otp;
 use App\Models\User\User;
 use App\Models\User\Wallet;
 use App\Models\User\WalletHistory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
@@ -171,5 +175,82 @@ class AuthController extends Controller
             "message"=>"account deleted.Please sign up again"
         ]);
 
+    }
+
+    public function sendOtp(Request $request)
+    {
+        $userExist=User::where('email',$request->email)->first();
+        if(!$userExist)
+        {
+            return response()->json([
+                "success"=>false,
+                "message"=>'user not found'
+            ]);
+        }
+
+        $otp = $this->generateOTP();
+        Otp::updateOrCreate( [
+            'email' => $request->email,
+        ], [
+            'otp'            => $otp,
+            'send_otp_count' => DB::raw( 'send_otp_count+1' ),
+        ] );
+
+        Mail::to($request->email)->send(new OtpMail($otp));
+
+        return  response()->json([
+            "success"=>true,
+            "message"=>"Otp has sent to your email.please check spam folder"
+        ]);
+
+    }
+    public function generateOTP() {
+        $number = mt_rand( 100000, 999999 ); // better than rand()
+        // call the same function if the otp exists already
+        if ( $this->OTPExists( $number ) ) {
+            return $this->generateOTP();
+        }
+
+        return $number;
+    }
+    public function OTPExists( $number ): bool {
+        return Otp::where( 'otp', $number )->exists();
+    }
+    public function verifyOtp(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'otp' => 'required|digits:6',
+        ]);
+
+        $email = $request->email;
+        $otp = $request->otp;
+
+        // Retrieve OTP from database
+        $otpRecord = Otp::where('email', $email)->first();
+
+        if (!$otpRecord) {
+            return response()->json([
+                'success'=>false,
+                'message' => 'OTP not found'
+            ], 400);
+        }
+
+
+
+        if ($otpRecord->otp == $otp) {
+            // OTP is correct, delete it from the database
+
+            return response()->json([
+                'success'=>true,
+                'message' => 'OTP verified successfully!'
+            ]);
+        }
+        else {
+            return response()->json([
+                'success'=>false,
+                'message' => 'Invalid OTP'
+            ], 400);
+        }
     }
 }

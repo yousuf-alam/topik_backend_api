@@ -7,11 +7,13 @@ use App\Models\Otp;
 use App\Models\User\User;
 use App\Models\User\Wallet;
 use App\Models\User\WalletHistory;
+use App\Models\UserFcm;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
@@ -122,6 +124,10 @@ class AuthController extends Controller
                     'error_message' => 'User does not exist',
                 ]
             ], Response::HTTP_NOT_FOUND);
+        }
+        if ( $request->has( 'fcm_token' ) ) {
+            Log::info( 'refreshed_login', [ $request->all(), $request->all() ] );
+            UserFcm::firstOrCreate( [ 'user_id' => $user->id, 'fcm_token' => $request->fcm_token ] );
         }
 
         if (Hash::check($request->password, $user->password)) {

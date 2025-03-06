@@ -103,7 +103,7 @@ class QuestionImport implements ToCollection, WithHeadingRow
         ];
 
 
-        shuffle($options);
+//        shuffle($options);
 
 
         return $options;

@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Mock\QuestionController;
 use App\Http\Controllers\Payment\PackageController;
 use App\Http\Controllers\Payment\PaymentSubmissionController;
+use App\Http\Controllers\QuestionReportController;
 use App\Http\Controllers\SuperAdmin\PermissionController;
 use App\Http\Controllers\SuperAdmin\RoleController;
 use App\Http\Controllers\User\Homecontroller;
@@ -108,6 +109,8 @@ Route::prefix('admin')->group(function() {
             //
             Route::post('credit-wallet',[WalletController::class,'creditWallet']);
             Route::post('debit-wallet',[WalletController::class,'debitWallet']);
+
+            Route::post('report-question',[QuestionReportController::class,'submitReport']);
         });
     });
 
